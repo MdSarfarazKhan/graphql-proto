@@ -1,0 +1,78 @@
+type Address {
+  street: String
+  city: String
+  state: String
+  zip: String
+}
+
+type Bike {
+  id: ID!
+  bikeType: String
+}
+
+type Booking {
+  id: ID!
+  propertyId: ID!
+  customer: Customer!
+  startTime: String!
+  endTime: String!
+  property: Property
+}
+
+input BookingInput {
+  propertyId: ID!
+  customerId: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+}
+
+type Car {
+  id: ID!
+  licensePlate: String
+}
+
+type Customer implements Person {
+  id: ID!
+  email: String!
+  name: String!
+  address: Address
+  bookings(limit: Int): [Booking!]
+  vehicle: Vehicle
+}
+
+scalar DateTime
+
+type Location {
+  name: String!
+}
+
+type Mutation {
+  addBooking(input: BookingInput): Booking
+}
+
+interface Person {
+  id: ID!
+  name: String!
+}
+
+type Property {
+  id: ID!
+  name: String!
+  location: Location
+  address: Address
+  bookings(limit: Int): [Booking]
+}
+
+type Query {
+  propertyById(id: ID!): Property
+  properties(limit: Int): [Property!]
+  contextTest(key: String!): String
+  dateTimeTest: DateTime
+  bookingById(id: ID!): Booking
+  bookingsByPropertyId(propertyId: ID!, limit: Int): [Booking!]
+  customerById(id: ID!): Customer
+  bookings(limit: Int): [Booking!]
+  customers(limit: Int): [Customer!]
+}
+
+union Vehicle = Bike | Car
